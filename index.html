@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AulaVirtual PRO · Centro Nacional Colombo Alemán</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--green:#39a900;--dark:#2d8600;--light:#f0fae6;--mid:#d4f0b0;--bg:#f7f9fc;--surface:#ffffff;--border:#e4eaf0;--text:#1a2332;--muted:#6b7a8d;--red:#e53e3e;--amber:#d97706;--blue:#2563eb;--r:14px;--rs:8px;--sh:0 2px 12px rgba(0,0,0,0.07);--shm:0 4px 24px rgba(0,0,0,0.10);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+.hidden{display:none!important;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-thumb{background:var(--green);border-radius:10px;}
+input,select,textarea{font-family:'Nunito Sans',sans-serif;}
+
+/* LOGIN */
+#login-screen{min-height:100vh;background:linear-gradient(160deg,#f0fae6,#e8f5d6 40%,#fff);display:flex;flex-direction:column;}
+.login-header{padding:1.25rem 2rem;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);background:#fff;}
+.login-logo-icon{width:44px;height:44px;background:var(--green);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;}
+.login-header-text{font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;}
+.login-header-sub{font-size:12px;color:var(--muted);}
+.login-hero{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem 1rem;}
+.login-card{background:#fff;border-radius:24px;box-shadow:var(--shm);padding:2.5rem 2rem;width:100%;max-width:420px;border:1px solid var(--border);}
+.login-badge{display:inline-flex;align-items:center;gap:6px;background:var(--light);color:var(--dark);font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:1rem;}
+.login-title{font-family:'Nunito',sans-serif;font-size:24px;font-weight:800;margin-bottom:6px;}
+.login-sub{font-size:13px;color:var(--muted);margin-bottom:1.5rem;line-height:1.5;}
+.login-form-group{margin-bottom:0.85rem;}
+.login-label{font-size:12px;font-weight:700;color:var(--muted);display:block;margin-bottom:4px;letter-spacing:0.3px;}
+.login-input{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:14px;color:var(--text);background:#fff;transition:border-color 0.15s;}
+.login-input:focus{outline:none;border-color:var(--green);}
+.login-btn{width:100%;padding:12px;background:var(--green);color:#fff;border:none;border-radius:var(--rs);font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito Sans',sans-serif;transition:background 0.15s;margin-top:0.5rem;}
+.login-btn:hover{background:var(--dark);}
+.login-err{background:#fee2e2;color:#991b1b;font-size:12px;padding:8px 12px;border-radius:var(--rs);margin-top:0.75rem;display:none;}
+.login-err.show{display:block;}
+.login-divider{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--muted);margin:1.25rem 0;font-weight:600;}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.role-card{display:flex;align-items:center;gap:14px;padding:1rem 1.1rem;border:2px solid var(--border);border-radius:var(--r);cursor:pointer;margin-bottom:10px;transition:all 0.2s;}
+.role-card:hover{border-color:var(--green);background:var(--light);}
+.role-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+
+/* APP SHELL */
+#app-shell{display:flex;min-height:100vh;}
+.sidebar{width:260px;flex-shrink:0;background:#fff;border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.sb-header{padding:1.25rem;border-bottom:1px solid var(--border);background:linear-gradient(135deg,var(--green),var(--dark));}
+.sb-logo-wrap{display:flex;align-items:center;gap:10px;}
+.sb-logo-icon{width:36px;height:36px;background:rgba(255,255,255,0.2);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;}
+.sb-logo-title{font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;color:#fff;}
+.sb-logo-sub{font-size:11px;color:rgba(255,255,255,0.7);margin-top:2px;}
+.sb-user{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;}
+.user-name{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;}
+.user-role{font-size:11px;color:var(--muted);margin-top:1px;}
+.sb-nav{flex:1;padding:0.75rem;}
+.nav-label{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--muted);padding:0.75rem 0.75rem 0.3rem;text-transform:uppercase;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--rs);font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.15s;margin-bottom:2px;}
+.nav-item:hover{background:var(--light);color:var(--dark);}
+.nav-item.active{background:var(--light);color:var(--dark);font-weight:700;}
+.sb-footer{padding:1rem 1.25rem;border-top:1px solid var(--border);}
+.logout-btn{display:flex;align-items:center;gap:8px;width:100%;padding:8px 10px;border-radius:var(--rs);font-size:13px;font-weight:600;color:var(--muted);background:none;border:none;cursor:pointer;font-family:'Nunito Sans',sans-serif;transition:all 0.15s;}
+.logout-btn:hover{background:#fee2e2;color:var(--red);}
+.main{flex:1;overflow-y:auto;min-width:0;}
+.topbar{background:#fff;border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;box-shadow:0 1px 6px rgba(0,0,0,0.05);}
+.topbar-title{font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;}
+.topbar-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.topbar-clock{font-size:12px;color:var(--muted);font-weight:600;background:var(--bg);padding:5px 12px;border-radius:20px;border:1px solid var(--border);}
+.content{padding:1.75rem 2rem;}
+.section{display:none;}
+.section.active{display:block;animation:fadeUp 0.2s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* COMPONENTES */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:1.75rem;}
+.stat-card{background:#fff;border-radius:var(--r);border:1px solid var(--border);padding:1rem 1.25rem;box-shadow:var(--sh);display:flex;align-items:center;gap:12px;}
+.stat-icon-wrap{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.stat-val{font-family:'Nunito',sans-serif;font-size:22px;font-weight:800;}
+.stat-lbl{font-size:11px;color:var(--muted);margin-top:2px;font-weight:600;}
+.card{background:#fff;border-radius:var(--r);border:1px solid var(--border);padding:1.25rem 1.5rem;margin-bottom:1rem;box-shadow:var(--sh);}
+.card-title{font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1rem;}
+.pill{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.pill-green{background:var(--light);color:var(--dark);}
+.pill-amber{background:#fffbeb;color:#92400e;border:1px solid #fde68a;}
+.pill-red{background:#fee2e2;color:#991b1b;}
+.pill-blue{background:#eff6ff;color:#1d4ed8;}
+.pill-gray{background:var(--bg);color:var(--muted);border:1px solid var(--border);}
+
+/* MODALES */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:100;display:flex;align-items:center;justify-content:center;padding:1rem;}
+.modal{background:#fff;border-radius:20px;padding:1.75rem;width:100%;max-width:480px;box-shadow:var(--shm);max-height:90vh;overflow-y:auto;}
+.modal-title{font-family:'Nunito',sans-serif;font-size:17px;font-weight:800;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;}
+.modal-close{background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted);padding:0;}
+.form-group{margin-bottom:0.9rem;}
+.form-label{font-size:12px;font-weight:700;color:var(--muted);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.3px;}
+.form-input{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:13px;color:var(--text);background:#fff;transition:border-color 0.15s;}
+.form-input:focus{outline:none;border-color:var(--green);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.btn-primary{padding:10px 20px;background:var(--green);color:#fff;border:none;border-radius:var(--rs);font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito Sans',sans-serif;transition:background 0.15s;}
+.btn-primary:hover{background:var(--dark);}
+.btn-secondary{padding:10px 20px;background:var(--bg);color:var(--muted);border:1px solid var(--border);border-radius:var(--rs);font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito Sans',sans-serif;}
+.btn-danger{padding:6px 14px;background:#fee2e2;color:var(--red);border:1px solid #fecaca;border-radius:var(--rs);font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito Sans',sans-serif;}
+
+/* GRUPOS */
+.tri-wrap{margin-bottom:0.75rem;}
+.tri-header{display:flex;align-items:center;gap:12px;padding:1rem 1.25rem;background:#fff;border:1px solid var(--border);border-radius:var(--r);cursor:pointer;transition:all 0.2s;box-shadow:var(--sh);}
+.tri-header:hover,.tri-header.open{border-color:var(--green);background:var(--light);}
+.tri-header.open{border-radius:var(--r) var(--r) 0 0;}
+.tri-name{font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;flex:1;}
+.tri-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.tri-badge{font-size:11px;font-weight:700;background:var(--green);color:#fff;border-radius:20px;padding:2px 10px;}
+.tri-chev{color:var(--muted);font-size:16px;transition:transform 0.25s;}
+.tri-chev.open{transform:rotate(90deg);}
+.tri-body{display:none;border:1px solid var(--green);border-top:none;border-radius:0 0 var(--r) var(--r);background:var(--light);padding:0.75rem;}
+.tri-body.open{display:block;}
+.grupo-card{display:flex;align-items:center;gap:12px;padding:0.9rem 1rem;background:#fff;border:1px solid var(--border);border-radius:var(--rs);cursor:pointer;margin-bottom:8px;transition:all 0.15s;box-shadow:var(--sh);}
+.grupo-card:hover{border-color:var(--green);box-shadow:0 4px 14px rgba(57,169,0,0.12);}
+.grupo-ficha{background:var(--green);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;flex-shrink:0;}
+.grupo-prog{flex:1;min-width:0;}
+.grupo-prog-name{font-size:13px;font-weight:700;}
+.grupo-prog-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+.grupo-comp{background:#fffbeb;color:#92400e;border:1px solid #fde68a;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;flex-shrink:0;}
+.add-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;background:var(--green);color:#fff;border:none;border-radius:var(--rs);font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito Sans',sans-serif;transition:background 0.15s;margin-bottom:1rem;}
+.add-btn:hover{background:var(--dark);}
+
+/* APRENDICES */
+.apr-row{display:flex;align-items:center;gap:10px;padding:10px 8px;border-bottom:1px solid var(--border);transition:background 0.1s;}
+.apr-row:last-child{border-bottom:none;}
+.apr-row:hover{background:var(--bg);}
+.apr-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;background:var(--light);color:var(--dark);}
+.apr-name{font-size:13px;font-weight:700;flex:1;}
+.apr-doc{font-size:11px;color:var(--muted);}
+.detail-panel{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;margin-top:0.75rem;box-shadow:var(--shm);border-top:3px solid var(--green);}
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--muted);background:none;border:none;cursor:pointer;padding:4px 0;margin-bottom:1rem;transition:color 0.15s;font-family:'Nunito Sans',sans-serif;}
+.back-btn:hover{color:var(--dark);}
+
+/* COMPETENCIAS */
+.comp-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:0.75rem;box-shadow:var(--sh);border-left:4px solid var(--green);}
+.bar{height:6px;border-radius:6px;background:var(--border);margin:10px 0;overflow:hidden;}
+.bar-fill{height:100%;border-radius:6px;transition:width 0.6s ease;}
+
+/* ACTIVIDADES */
+.act-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
+.act-item:last-child{border-bottom:none;}
+.act-name{flex:1;font-size:13px;font-weight:600;}
+.act-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* GUÍAS */
+.guia-section{font-size:12px;font-weight:700;color:var(--muted);padding:10px 0 6px;border-bottom:1px solid var(--border);margin-bottom:2px;display:flex;align-items:center;gap:8px;}
+.guia-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+.guia-item:last-child{border-bottom:none;}
+.guia-name{flex:1;font-size:13px;font-weight:600;}
+.guia-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+.btn-dl{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px;border:2px solid var(--green);color:var(--dark);background:var(--light);cursor:pointer;transition:all 0.15s;font-family:'Nunito Sans',sans-serif;white-space:nowrap;}
+.btn-dl:hover{background:var(--green);color:#fff;}
+.upload-zone{border:2px dashed var(--mid);border-radius:var(--r);padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:1rem;background:var(--light);}
+.upload-zone:hover{border-color:var(--green);box-shadow:0 0 0 4px rgba(57,169,0,0.06);}
+.perfil-hero{background:linear-gradient(135deg,var(--green),var(--dark));border-radius:var(--r);padding:1.5rem;display:flex;align-items:center;gap:16px;margin-bottom:1rem;color:#fff;}
+.perfil-av{width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;color:#fff;flex-shrink:0;border:2px solid rgba(255,255,255,0.4);}
+.loading{text-align:center;padding:2rem;color:var(--muted);font-size:13px;}
+.empty{text-align:center;padding:2rem;color:var(--muted);font-size:13px;}
+</style>
+</head>
+<body>
+
+<!-- FIREBASE SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+<script>
+// Forzar conexión HTTP en vez de WebSocket para evitar bloqueos de red
+if(typeof firebase !== 'undefined') {
+  window._forceHTTP = true;
+}
+</script>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <header class="login-header">
+    <div class="login-logo-icon">🎓</div>
+    <div>
+      <div class="login-header-text">AulaVirtual PRO</div>
+      <div class="login-header-sub">Centro Nacional Colombo Alemán · SENA</div>
+    </div>
+  </header>
+  <div class="login-hero">
+    <div class="login-card">
+      <div class="login-badge">🟢 PLATAFORMA ACTIVA 2026</div>
+      <div class="login-title">Bienvenido</div>
+      <div class="login-sub">Ingresa con tu correo y contraseña para acceder a la plataforma académica.</div>
+      <div class="form-group">
+        <label class="form-label">Correo electrónico</label>
+        <input type="email" id="login-email" class="form-input" placeholder="correo@ejemplo.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input type="password" id="login-pass" class="form-input" placeholder="••••••••">
+      </div>
+      <button class="login-btn" onclick="doLogin()">Ingresar →</button>
+      <div class="login-err" id="login-err"></div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app-shell" class="hidden">
+  <aside class="sidebar">
+    <div class="sb-header">
+      <div class="sb-logo-wrap">
+        <div class="sb-logo-icon">🎓</div>
+        <div>
+          <div class="sb-logo-title">AulaVirtual PRO</div>
+          <div class="sb-logo-sub">Colombo Alemán · SENA</div>
+        </div>
+      </div>
+    </div>
+    <div class="sb-user">
+      <div class="avatar" id="sb-av" style="background:#d1fae5;color:#065f46;"></div>
+      <div>
+        <div class="user-name" id="sb-name"></div>
+        <div class="user-role" id="sb-role"></div>
+      </div>
+    </div>
+    <nav style="flex:1;padding:0.75rem;" id="sb-nav"></nav>
+    <div class="sb-footer">
+      <button class="logout-btn" onclick="doLogout()">🚪 Cerrar sesión</button>
+    </div>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-title" id="tb-title">Panel</div>
+        <div class="topbar-sub" id="tb-sub"></div>
+      </div>
+      <div class="topbar-clock" id="tb-clock"></div>
+    </div>
+    <div class="content" id="main-content"></div>
+  </main>
+</div>
+
+<!-- MODAL CONTAINER -->
+<div id="modal-container"></div>
+
+<script>
+// ── FIREBASE CONFIG ──────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyCI4bldSSxarUxJK13kSV_hiBVERFMejy0",
+  authDomain: "aula-virtual-pro-25e55.firebaseapp.com",
+  projectId: "aula-virtual-pro-25e55",
+  storageBucket: "aula-virtual-pro-25e55.firebasestorage.app",
+  messagingSenderId: "164767164098",
+  appId: "1:164767164098:web:ca53604628bacda7dfbd5b"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db   = firebase.firestore();
+db.settings({ experimentalForceLongPolling: true });
+const storage = firebase.storage();
+
+// ── ESTADO ───────────────────────────────────────────────────────────
+let currentUser = null;
+let currentRole = null;
+
+// ── RELOJ ────────────────────────────────────────────────────────────
+function clock(){
+  const el = document.getElementById('tb-clock');
+  if(el) el.textContent = new Date().toLocaleDateString('es-CO',{weekday:'short',day:'2-digit',month:'short'}) + ' · ' + new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+}
+setInterval(clock,1000); clock();
+
+// ── AUTH ─────────────────────────────────────────────────────────────
+auth.onAuthStateChanged(async user => {
+  if(user){
+    currentUser = user;
+    const doc = await db.collection('usuarios').doc(user.uid).get();
+    if(doc.exists){
+      currentRole = doc.data().rol;
+      setupApp();
+    } else {
+      auth.signOut();
+    }
+  } else {
+    currentUser = null; currentRole = null;
+    document.getElementById('login-screen').classList.remove('hidden');
+    document.getElementById('app-shell').classList.add('hidden');
+  }
+});
+
+async function doLogin(){
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-pass').value;
+  const err   = document.getElementById('login-err');
+  err.classList.remove('show');
+  if(!email||!pass){ err.textContent='Completa todos los campos.'; err.classList.add('show'); return; }
+  try {
+    await auth.signInWithEmailAndPassword(email, pass);
+  } catch(e){
+    err.textContent = e.code==='auth/user-not-found'||e.code==='auth/wrong-password'||e.code==='auth/invalid-credential' ? 'Correo o contraseña incorrectos.' : 'Error: '+e.message;
+    err.classList.add('show');
+  }
+}
+
+function doLogout(){ auth.signOut(); }
+
+document.getElementById('login-pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+// ── SETUP APP ─────────────────────────────────────────────────────────
+async function setupApp(){
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('app-shell').classList.remove('hidden');
+  const doc = await db.collection('usuarios').doc(currentUser.uid).get();
+  const data = doc.data();
+  document.getElementById('sb-name').textContent = data.nombre || currentUser.email;
+  document.getElementById('sb-role').textContent = currentRole === 'instructor' ? 'Instructor' : 'Aprendiz';
+  document.getElementById('sb-av').textContent = (data.nombre||'U').substring(0,2).toUpperCase();
+  setupSidebar();
+  navigate(currentRole==='instructor' ? 'dashboard' : 'perfil');
+}
+
+// ── SIDEBAR ───────────────────────────────────────────────────────────
+function setupSidebar(){
+  const isInst = currentRole==='instructor';
+  const items = isInst ? [
+    {key:'dashboard',icon:'🏠',label:'Tablero'},
+    {key:'grupos',icon:'📁',label:'Grupos'},
+    {key:'competencias',icon:'📋',label:'Competencias'},
+    {key:'actividades',icon:'✏️',label:'Actividades'},
+    {key:'guias',icon:'📚',label:'Guías de aprendizaje'},
+    {key:'usuarios',icon:'👥',label:'Usuarios'},
+  ] : [
+    {key:'perfil',icon:'🪪',label:'Mi perfil'},
+    {key:'competencias',icon:'📋',label:'Mis competencias'},
+    {key:'actividades',icon:'✏️',label:'Mis actividades'},
+    {key:'guias',icon:'📚',label:'Mis guías'},
+  ];
+  document.getElementById('sb-nav').innerHTML =
+    '<div class="nav-label">Menú</div>' +
+    items.map(n=>`<div class="nav-item" id="nav-${n.key}" onclick="navigate('${n.key}')">${n.icon} ${n.label}</div>`).join('');
+}
+
+function setNav(key){
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+  const el=document.getElementById('nav-'+key);
+  if(el) el.classList.add('active');
+}
+
+function navigate(key){
+  setNav(key);
+  const titles={dashboard:'Tablero',grupos:'Grupos',competencias:'Competencias',actividades:'Actividades',guias:'Guías',usuarios:'Usuarios',perfil:'Mi perfil'};
+  document.getElementById('tb-title').textContent=titles[key]||key;
+  document.getElementById('tb-sub').textContent='Centro Colombo Alemán · SENA · 2026';
+  if(currentRole==='instructor') renderInst(key);
+  else renderApr(key);
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────
+function pillEst(e){
+  if(e==='done')    return '<span class="pill pill-green">✓ Entregada</span>';
+  if(e==='pending') return '<span class="pill pill-amber">⏳ Pendiente</span>';
+  if(e==='late')    return '<span class="pill pill-red">✗ Vencida</span>';
+  return '';
+}
+function modal(html){ document.getElementById('modal-container').innerHTML=html; }
+function closeModal(){ document.getElementById('modal-container').innerHTML=''; }
+
+// ── INSTRUCTOR: DASHBOARD ─────────────────────────────────────────────
+async function renderInst(sec){
+  const c=document.getElementById('main-content');
+  if(sec==='dashboard'){
+    c.innerHTML='<div class="loading">Cargando tablero...</div>';
+    const [grupos,aprendices,actividades,guias] = await Promise.all([
+      db.collection('grupos').get(),
+      db.collection('usuarios').where('rol','==','aprendiz').get(),
+      db.collection('actividades').get(),
+      db.collection('guias').get(),
+    ]);
+    const pend = actividades.docs.filter(d=>d.data().estado==='pending').length;
+    const late = actividades.docs.filter(d=>d.data().estado==='late').length;
+    c.innerHTML=`
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon-wrap" style="background:#d1fae5;">📁</div><div><div class="stat-val">${grupos.size}</div><div class="stat-lbl">Grupos</div></div></div>
+        <div class="stat-card"><div class="stat-icon-wrap" style="background:#dbeafe;">👥</div><div><div class="stat-val">${aprendices.size}</div><div class="stat-lbl">Aprendices</div></div></div>
+        <div class="stat-card"><div class="stat-icon-wrap" style="background:#fef3c7;">⏳</div><div><div class="stat-val">${pend}</div><div class="stat-lbl">Pendientes</div></div></div>
+        <div class="stat-card"><div class="stat-icon-wrap" style="background:#fee2e2;">⚠️</div><div><div class="stat-val">${late}</div><div class="stat-lbl">Vencidas</div></div></div>
+      </div>
+      <div class="grid2">
+        <div class="card"><div class="card-title">📁 Grupos recientes</div>${
+          grupos.docs.slice(0,4).map(d=>{const g=d.data();return`<div class="grupo-card" onclick="navigate('grupos')"><span class="grupo-ficha">Ficha ${g.ficha}</span><div class="grupo-prog"><div class="grupo-prog-name">${g.programa}</div><div class="grupo-prog-meta">${g.trimestre}</div></div><span class="grupo-comp">${g.competencia}</span></div>`;}).join('') || '<div class="empty">Sin grupos aún</div>'
+        }</div>
+        <div class="card"><div class="card-title">⚠️ Sin entregar</div>${
+          actividades.docs.filter(d=>d.data().estado!=='done').slice(0,5).map(d=>{const a=d.data();return`<div class="act-item"><div style="flex:1;min-width:0;"><div class="act-name">${a.nombre}</div><div class="act-meta">${a.competencia||''} · Vence ${a.vence}</div></div>${pillEst(a.estado)}</div>`;}).join('') || '<div class="empty">Todo al día ✓</div>'
+        }</div>
+      </div>`;
+  }
+  else if(sec==='grupos') await renderGrupos();
+  else if(sec==='competencias') await renderCompetencias();
+  else if(sec==='actividades') await renderActividades();
+  else if(sec==='guias') await renderGuias();
+  else if(sec==='usuarios') await renderUsuarios();
+}
+
+// ── GRUPOS ────────────────────────────────────────────────────────────
+async function renderGrupos(){
+  const c=document.getElementById('main-content');
+  c.innerHTML='<div class="loading">Cargando grupos...</div>';
+  const snap = await db.collection('grupos').orderBy('trimestre').get();
+  const trimestres = ['2026-1','2026-2','2026-3'];
+  const labels = {'2026-1':'Trimestre I · 2026','2026-2':'Trimestre II · 2026','2026-3':'Trimestre III · 2026'};
+  const descs  = {'2026-1':'Enero – Abril 2026','2026-2':'Mayo – Agosto 2026','2026-3':'Septiembre – Diciembre 2026'};
+
+  c.innerHTML=`
+    <button class="add-btn" onclick="modalNuevoGrupo()">+ Agregar grupo</button>
+    ${trimestres.map((tri,i)=>{
+      const gs = snap.docs.filter(d=>d.data().trimestre===tri);
+      return `<div class="tri-wrap">
+        <div class="tri-header" id="th-${i}" onclick="toggleTri(${i})">
+          <span style="font-size:18px;">${gs.length?'📂':'📁'}</span>
+          <div style="flex:1;"><div class="tri-name">${labels[tri]}</div><div class="tri-sub">${descs[tri]}</div></div>
+          <span class="tri-badge">${gs.length} grupo${gs.length!==1?'s':''}</span>
+          <span class="tri-chev" id="tc-${i}">›</span>
+        </div>
+        <div class="tri-body" id="tb-${i}">
+          ${gs.map(d=>{const g=d.data();const id=d.id;return`
+            <div class="grupo-card">
+              <span class="grupo-ficha">Ficha ${g.ficha}</span>
+              <div class="grupo-prog" onclick="verGrupo('${id}')">
+                <div class="grupo-prog-name">${g.programa}</div>
+                <div class="grupo-prog-meta">👥 ${g.numAprendices||0} aprendices</div>
+              </div>
+              <span class="grupo-comp">${g.competencia}</span>
+              <button class="btn-danger" onclick="editarGrupo('${id}')">✏️</button>
+              <button class="btn-danger" onclick="eliminarGrupo('${id}','${g.programa}')">🗑️</button>
+            </div>`;}).join('') || '<div class="empty">Sin grupos en este trimestre</div>'}
+          <div id="detalle-${i}"></div>
+        </div>
+      </div>`;
+    }).join('')}`;
+  // abrir primer trimestre
+  toggleTri(0);
+}
+
+function toggleTri(i){
+  ['tb','th','tc'].forEach(p=>{document.getElementById(p+'-'+i)?.classList.toggle('open');});
+}
+
+async function verGrupo(gid){
+  const gDoc = await db.collection('grupos').doc(gid).get();
+  const g = gDoc.data();
+  const aprs = await db.collection('usuarios').where('grupoId','==',gid).where('rol','==','aprendiz').get();
+  const idx = ['2026-1','2026-2','2026-3'].indexOf(g.trimestre);
+  const det = document.getElementById('detalle-'+idx);
+  if(!det) return;
+  det.innerHTML=`
+    <div class="detail-panel">
+      <button class="back-btn" onclick="document.getElementById('detalle-${idx}').innerHTML=''">‹ Volver</button>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.25rem;">
+        <span class="grupo-ficha" style="font-size:13px;padding:5px 14px;">Ficha ${g.ficha}</span>
+        <span style="font-family:'Nunito',sans-serif;font-size:16px;font-weight:800;">${g.programa}</span>
+        <span class="grupo-comp" style="margin-left:auto;">📋 ${g.competencia}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div style="font-size:12px;font-weight:700;color:var(--muted);">APRENDICES · ${aprs.size} REGISTROS</div>
+        <button class="add-btn" style="margin-bottom:0;" onclick="modalNuevoAprendiz('${gid}')">+ Aprendiz</button>
+      </div>
+      ${aprs.docs.map(d=>{const a=d.data();return`
+        <div class="apr-row">
+          <div class="apr-av">${(a.nombre||'?').substring(0,2).toUpperCase()}</div>
+          <div style="flex:1;min-width:0;"><div class="apr-name">${a.nombre}</div><div class="apr-doc">${a.correo}</div></div>
+          <span class="pill ${a.estado==='Activo'?'pill-green':'pill-red'}">${a.estado||'Activo'}</span>
+          <button class="btn-danger" style="margin-left:8px;" onclick="eliminarUsuario('${d.id}','${a.nombre}')">🗑️</button>
+        </div>`}).join('') || '<div class="empty">Sin aprendices en este grupo</div>'}
+    </div>`;
+  det.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+// ── MODALES GRUPOS ────────────────────────────────────────────────────
+async function modalNuevoGrupo(){
+  const comps = await db.collection('competencias').get();
+  modal(`<div class="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-title">Nuevo grupo <button class="modal-close" onclick="closeModal()">✕</button></div>
+      <div class="form-group"><label class="form-label">Número de ficha</label><input id="mf-ficha" class="form-input" placeholder="Ej: 2751890"></div>
+      <div class="form-group"><label class="form-label">Programa</label><input id="mf-prog" class="form-input" placeholder="Ej: Tecnología en Sistemas"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Trimestre</label>
+          <select id="mf-tri" class="form-input">
+            <option value="2026-1">Trimestre I · 2026</option>
+            <option value="2026-2">Trimestre II · 2026</option>
+            <option value="2026-3">Trimestre III · 2026</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Competencia</label>
+          <select id="mf-comp" class="form-input">
+            ${comps.docs.map(d=>`<option value="${d.data().nombre}">${d.data().nombre}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:1rem;">
+        <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+        <button class="btn-primary" onclick="guardarGrupo()">Guardar</button>
+      </div>
+    </div>
+  </div>`);
+}
+
+async function guardarGrupo(){
+  const ficha=document.getElementById('mf-ficha').value.trim();
+  const prog=document.getElementById('mf-prog').value.trim();
+  const tri=document.getElementById('mf-tri').value;
+  const comp=document.getElementById('mf-comp').value;
+  if(!ficha||!prog) return alert('Completa todos los campos');
+  await db.collection('grupos').add({ficha,programa:prog,trimestre:tri,competencia:comp,numAprendices:0,creadoEn:firebase.firestore.FieldValue.serverTimestamp()});
+  closeModal(); renderGrupos();
+}
+
+async function editarGrupo(id){
+  const doc = await db.collection('grupos').doc(id).get();
+  const g = doc.data();
+  const comps = await db.collection('competencias').get();
+  modal(`<div class="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-title">Editar grupo <button class="modal-close" onclick="closeModal()">✕</button></div>
+      <div class="form-group"><label class="form-label">Número de ficha</label><input id="mf-ficha" class="form-input" value="${g.ficha}"></div>
+      <div class="form-group"><label class="form-label">Programa</label><input id="mf-prog" class="form-input" value="${g.programa}"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Trimestre</label>
+          <select id="mf-tri" class="form-input">
+            <option value="2026-1" ${g.trimestre==='2026-1'?'selected':''}>Trimestre I · 2026</option>
+            <option value="2026-2" ${g.trimestre==='2026-2'?'selected':''}>Trimestre II · 2026</option>
+            <option value="2026-3" ${g.trimestre==='2026-3'?'selected':''}>Trimestre III · 2026</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Competencia</label>
+          <select id="mf-comp" class="form-input">
+            ${comps.docs.map(d=>`<option value="${d.data().nombre}" ${d.data().nombre===g.competencia?'selected':''}>${d.data().nombre}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:1rem;">
+        <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+        <button class="btn-primary" onclick="actualizarGrupo('${id}')">Actualizar</button>
+      </div>
+    </div>
+  </div>`);
+}
+
+async function actualizarGrupo(id){
+  await db.collection('grupos').doc(id).update({
+    ficha:document.getElementById('mf-ficha').value.trim(),
+    programa:document.getElementById('mf-prog').value.trim(),
+    trimestre:document.getElementById('mf-tri').value,
+    competencia:document.getElementById('mf-comp').value,
+  });
+  closeModal(); renderGrupos();
+}
+
+async function eliminarGrupo(id,nombre){
+  if(!confirm(`¿Eliminar el grupo "${nombre}"?`)) return;
+  await db.collection('grupos').doc(id).delete();
+  renderGrupos();
+}
+
+// ── APRENDICES ────────────────────────────────────────────────────────
+function modalNuevoAprendiz(grupoId){
+  modal(`<div class="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-title">Nuevo aprendiz <button class="modal-close" onclick="closeModal()">✕</button></div>
+      <div class="form-group"><label class="form-label">Nombre completo</label><input id="ma-nombre" class="form-input" placeholder="Ej: Juan Pérez"></div>
+      <div class="form-group"><label class="form-label">Correo electrónico</label><input id="ma-email" class="form-input" type="email" placeholder="correo@ejemplo.com"></div>
+      <div class="form-group"><label class="form-label">Contraseña temporal</label><input id="ma-pass" class="form-input" type="password" placeholder="Mínimo 6 caracteres"></div>
+      <div class="form-group"><label class="form-label">Documento de identidad</label><input id="ma-doc" class="form-input" placeholder="Número de documento"></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:1rem;">
+        <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+        <button class="btn-primary" onclick="crearAprendiz('${grupoId}')">Crear</button>
+      </div>
+    </div>
+  </div>`);
+}
+
+async function crearAprendiz(grupoId){
+  const nombre=document.getElementById('ma-nombre').value.trim();
+  const email=document.getElementById('ma-email').value.trim();
+  const pass=document.getElementById('ma-pass').value;
+  const doc=document.getElementById('ma-doc').value.trim();
+  if(!nombre||!email||!pass) return alert('Completa todos los campos');
+  try {
+    const cred = await auth.createUserWithEmailAndPassword(email,pass);
+    await db.collection('usuarios').doc(cred.user.uid).set({nombre,correo:email,documento:doc,rol:'aprendiz',grupoId,estado:'Activo',creadoEn:firebase.firestore.FieldValue.serverTimestamp()});
+    await db.collection('grupos').doc(grupoId).update({numAprendices:firebase.firestore.FieldValue.increment(1)});
+    closeModal();
+    alert(`✅ Aprendiz ${nombre} creado. Puede ingresar con: ${email}`);
+    renderGrupos();
+  } catch(e){ alert('Error: '+e.message); }
+}
+
+async function eliminarUsuario(uid,nombre){
+  if(!confirm(`¿Eliminar a "${nombre}"?`)) return;
+  await db.collection('usuarios').doc(uid).delete();
+  renderGrupos();
+}
+
+// ── COMPETENCIAS ──────────────────────────────────────────────────────
+async function renderCompetencias(){
+  const c=document.getElementById('main-content');
+  c.innerHTML='<div class="loading">Cargando...</div>';
+  const snap = await db.collection('competencias').get();
+  c.innerHTML=`
+    <button class="add-btn" onclick="modalNuevaComp()">+ Nueva competencia</button>
+    ${snap.docs.map(d=>{const comp=d.data();const id=d.id;return`
+      <div class="comp-card" style="border-left-color:${comp.color||'#39a900'};">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+          <div style="width:10px;height:10px;border-radius:50%;background:${comp.color||'#39a900'};flex-shrink:0;"></div>
+          <span style="font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;flex:1;">${comp.nombre}</span>
+          <span class="pill pill-gray">${comp.trimestre||''}</span>
+          <button class="btn-danger" onclick="editarComp('${id}')">✏️ Editar</button>
+          <button class="btn-danger" onclick="eliminarComp('${id}','${comp.nombre}')">🗑️</button>
+        </div>
+        <div class="bar"><div class="bar-fill" style="width:${comp.pct||0}%;background:${comp.color||'#39a900'};"></div></div>
+      </div>`;}).join('') || '<div class="empty card">Sin competencias. Agrega una.</div>'}`;
+}
+
+function modalNuevaComp(){
+  modal(`<div class="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-title">Nueva competencia <button class="modal-close" onclick="closeModal()">✕</button></div>
+      <div class="form-group"><label class="form-label">Nombre de la competencia</label><input id="mc-nombre" class="form-input" placeholder="Ej: Control de Calidad"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Trimestre</label>
+          <select id="mc-tri" class="form-input">
+            <option value="2026-1">Trimestre I · 2026</option>
+            <option value="2026-2">Trimestre II · 2026</option>
+            <option value="2026-3">Trimestre III · 2026</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Color</label>
+          <input id="mc-color" class="form-input" type="color" value="#39a900">
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:1rem;">
+        <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+        <button class="btn-primary" onclick="guardarComp()">Guardar</button>
+      </div>
+    </div>
+  </div>`);
+}
+
+async function guardarComp(){
+  const nombre=document.getElementById('mc-nombre').value.trim();
+  const tri=document.getElementById('mc-tri').value;
+  const color=document.getElementById('mc-color').value;
+  if(!nombre) return alert('Escribe el nombre');
+  await db.collection('competencias').add({nombre,trimestre:tri,color,pct:0,creadoEn:firebase.firestore.FieldValue.serverTimestamp()});
+  closeModal(); renderCompetencias();
+}
+
+async function editarComp(id){
+  const doc=await db.collection('competencias').doc(id).get();
+  const comp=doc.data();
+  modal(`<div class="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-title">Editar competencia <button class="modal-close" onclick="closeModal()">✕</button></div>
+      <div class="form-group"><label class="form-label">Nombre</label><input id="mc-nombre" class="form-input" value="${comp.nombre}"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Trimestre</label>
+          <select id="mc-tri" class="form-input">
+            <option value="2026-1" ${comp.trimestre==='2026-1'?'selected':''}>Trimestre I · 2026</option>
+            <option value="2026-2" ${comp.trimestre==='2026-2'?'selected':''}>Trimestre II · 2026</option>
+            <option value="2026-3" ${comp.trimestre==='2026-3'?'selected':''}>Trimestre III · 2026</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Progreso %</label>
+          <input id="mc-pct" class="form-input" type="number" min="0" max="100" value="${comp.pct||0}">
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:1rem;">
+        <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+        <button class="btn-primary" onclick="actualizarComp('${id}')">Actualizar</button>
+      </div>
+    </div>
+  </div>`);
+}
+
+async function actualizarComp(id){
+  await db.collection('competencias').doc(id).update({
+    nombre:document.getElementById('mc-nombre').value.trim(),
+    trimestre:document.getElementById('mc-tri').value,
+    pct:parseInt(document.getElementById('mc-pct').value)||0,
+  });
+  closeModal(); renderCompetencias();
+}
+
+async function eliminarComp(id,nombre){
+  if(!confirm(`¿Eliminar "${nombre}"?`)) return;
+  await db.collection('competencias').doc(id).delete();
+  renderCompetencias();
+}
+
+// ── ACTIVIDADES ───────────────────────────────────────────────────────
+async function renderActividades(){
+  const c=document.getElementById('main-content');
+  c.innerHTML='<div class="loading">Cargando...</div>';
+  const [actSnap, compSnap] = await Promise.all([
+    db.collection('actividades').orderBy('creadoEn','desc').get(),
+    db.collection('competencias').get(),
+  ]);
+  const comps = compSnap.docs.map(d=>({id:d.id,...d.data()}));
+  c.innerHTML=`
+    <button class="add-btn" onclick="modalNuevaAct(${JSON.stringify(comps).replace(/"/g,'&quot;')})">+ Nueva actividad</button>
+    <div class="card">
+      <div class="card-title">✏️ Todas las actividades</div>
+      ${actSnap.docs.map(d=>{const a=d.data();const id=d.id;return`
+        <div class="act-item">
+          <div style="flex:1;min-width:0;">
+            <div class="act-name">${a.nombre}</div>
+            <div class="act-meta">${a.competencia||''} · Vence ${a.vence||''}</div>
+          </div>
+          ${pillEst(a.estado)}
+          <button class="btn-danger" style="margin-left:8px;" onclick="editarAct('${id}')">✏️</button>
+          <button class="btn-danger" onclick="eliminarAct('${id}','${a.nombre}')">🗑️</button>
+        </div>`}).join('') || '<div class="empty">Sin actividades aún</div>'}
+    </div>`;
+}
+
+function modalNuevaAct(comps){
+  modal(`<div class="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-title">Nueva actividad <button class="modal-close" onclick="closeModal()">✕</button></div>
+      <div class="form-group"><label class="form-label">Nombre de la actividad</label><input id="ma2-nombre" class="form-input" placeholder="Ej: Taller de ondas"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Competencia</label>
+          <select id="ma2-comp" class="form-input">
+            ${comps.map(co=>`<option value="${co.nombre}">${co.nombre}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Fecha de vencimiento</label>
+          <input id="ma2-vence" class="form-input" type="date">
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Estado inicial</label>
+        <select id="ma2-est" class="form-input">
+          <option value="pending">Pendiente</option>
+          <option value="done">Entregada</option>
+          <option value="late">Vencida</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:1rem;">
+        <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+        <button class="btn-primary" onclick="guardarAct()">Guardar</button>
+      </div>
+    </div>
+  </div>`);
+}
+
+async function guardarAct(){
+  const nombre=document.getElementById('ma2-nombre').value.trim();
+  const comp=document.getElementById('ma2-comp').value;
+  const vence=document.getElementById('ma2-vence').value;
+  const estado=document.getElementById('ma2-est').value;
+  if(!nombre) return alert('Escribe el nombre');
+  await db.collection('actividades').add({nombre,competencia:comp,vence,estado,creadoEn:firebase.firestore.FieldValue.serverTimestamp()});
+  closeModal(); renderActividades();
+}
+
+async function editarAct(id){
+  const doc=await db.collection('actividades').doc(id).get();
+  const a=doc.data();
+  modal(`<div class="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-title">Editar actividad <button class="modal-close" onclick="closeModal()">✕</button></div>
+      <div class="form-group"><label class="form-label">Nombre</label><input id="ma2-nombre" class="form-input" value="${a.nombre}"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Vencimiento</label><input id="ma2-vence" class="form-input" type="date" value="${a.vence}"></div>
+        <div class="form-group"><label class="form-label">Estado</label>
+          <select id="ma2-est" class="form-input">
+            <option value="pending" ${a.estado==='pending'?'selected':''}>Pendiente</option>
+            <option value="done" ${a.estado==='done'?'selected':''}>Entregada</option>
+            <option value="late" ${a.estado==='late'?'selected':''}>Vencida</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:1rem;">
+        <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+        <button class="btn-primary" onclick="actAct('${id}')">Actualizar</button>
+      </div>
+    </div>
+  </div>`);
+}
+
+async function actAct(id){
+  await db.collection('actividades').doc(id).update({
+    nombre:document.getElementById('ma2-nombre').value.trim(),
+    vence:document.getElementById('ma2-vence').value,
+    estado:document.getElementById('ma2-est').value,
+  });
+  closeModal(); renderActividades();
+}
+
+async function eliminarAct(id,nombre){
+  if(!confirm(`¿Eliminar "${nombre}"?`)) return;
+  await db.collection('actividades').doc(id).delete();
+  renderActividades();
+}
+
+// ── GUÍAS ─────────────────────────────────────────────────────────────
+async function renderGuias(){
+  const c=document.getElementById('main-content');
+  c.innerHTML='<div class="loading">Cargando guías...</div>';
+  const [guiasSnap, compSnap] = await Promise.all([
+    db.collection('guias').orderBy('creadoEn','desc').get(),
+    db.collection('competencias').get(),
+  ]);
+  const comps = compSnap.docs.map(d=>({id:d.id,...d.data()}));
+  c.innerHTML=`
+    <div class="card">
+      <div class="card-title">📚 Repositorio de guías</div>
+      <div class="upload-zone" onclick="modalSubirGuia(${JSON.stringify(comps).replace(/"/g,'&quot;')})">
+        <div style="font-size:26px;margin-bottom:6px;">⬆️</div>
+        <div style="font-size:13px;font-weight:700;color:var(--dark);">Subir nueva guía</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px;">Haz clic para cargar un archivo PDF</div>
+      </div>
+      ${guiasSnap.docs.map(d=>{const g=d.data();const id=d.id;return`
+        <div class="guia-item">
+          <span style="font-size:22px;">📄</span>
+          <div style="flex:1;min-width:0;">
+            <div class="guia-name">${g.nombre}</div>
+            <div class="guia-meta">${g.competencia||''} · ${g.size||''} · ${g.fecha||''}</div>
+          </div>
+          <a href="${g.url}" target="_blank" class="btn-dl">⬇️ Ver</a>
+          <button class="btn-danger" style="margin-left:6px;" onclick="eliminarGuia('${id}','${g.nombre}','${g.path||''}')">🗑️</button>
+        </div>`}).join('') || '<div class="empty">Sin guías aún. Sube la primera.</div>'}
+    </div>`;
+}
+
+function modalSubirGuia(comps){
+  modal(`<div class="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-title">Subir guía <button class="modal-close" onclick="closeModal()">✕</button></div>
+      <div class="form-group"><label class="form-label">Nombre de la guía</label><input id="mg-nombre" class="form-input" placeholder="Ej: Guía 1 - Introducción"></div>
+      <div class="form-group"><label class="form-label">Competencia</label>
+        <select id="mg-comp" class="form-input">
+          ${comps.map(co=>`<option value="${co.nombre}">${co.nombre}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Archivo PDF</label><input id="mg-file" class="form-input" type="file" accept=".pdf"></div>
+      <div id="mg-progress" style="font-size:12px;color:var(--muted);margin-top:8px;"></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:1rem;">
+        <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+        <button class="btn-primary" onclick="subirGuia()">Subir</button>
+      </div>
+    </div>
+  </div>`);
+}
+
+async function subirGuia(){
+  const nombre=document.getElementById('mg-nombre').value.trim();
+  const comp=document.getElementById('mg-comp').value;
+  const file=document.getElementById('mg-file').files[0];
+  const prog=document.getElementById('mg-progress');
+  if(!nombre||!file) return alert('Completa todos los campos y selecciona un archivo');
+  const path=`guias/${Date.now()}_${file.name}`;
+  const ref=storage.ref(path);
+  const task=ref.put(file);
+  prog.textContent='Subiendo...';
+  task.on('state_changed',
+    snap=>{ prog.textContent=`Subiendo: ${Math.round(snap.bytesTransferred/snap.totalBytes*100)}%`; },
+    err=>{ alert('Error: '+err.message); },
+    async ()=>{
+      const url=await ref.getDownloadURL();
+      const size=(file.size/1024/1024).toFixed(1)+' MB';
+      const fecha=new Date().toLocaleDateString('es-CO',{month:'short',year:'numeric'});
+      await db.collection('guias').add({nombre,competencia:comp,url,path,size,fecha,creadoEn:firebase.firestore.FieldValue.serverTimestamp()});
+      closeModal(); renderGuias();
+    }
+  );
+}
+
+async function eliminarGuia(id,nombre,path){
+  if(!confirm(`¿Eliminar "${nombre}"?`)) return;
+  if(path){ try{ await storage.ref(path).delete(); }catch(e){} }
+  await db.collection('guias').doc(id).delete();
+  renderGuias();
+}
+
+// ── USUARIOS ──────────────────────────────────────────────────────────
+async function renderUsuarios(){
+  const c=document.getElementById('main-content');
+  c.innerHTML='<div class="loading">Cargando usuarios...</div>';
+  const snap=await db.collection('usuarios').get();
+  c.innerHTML=`
+    <div class="card">
+      <div class="card-title">👥 Todos los usuarios</div>
+      ${snap.docs.map(d=>{const u=d.data();return`
+        <div class="apr-row">
+          <div class="apr-av">${(u.nombre||'?').substring(0,2).toUpperCase()}</div>
+          <div style="flex:1;min-width:0;"><div class="apr-name">${u.nombre||'Sin nombre'}</div><div class="apr-doc">${u.correo}</div></div>
+          <span class="pill ${u.rol==='instructor'?'pill-blue':'pill-green'}">${u.rol}</span>
+        </div>`}).join('')}
+    </div>`;
+}
+
+// ── APRENDIZ ──────────────────────────────────────────────────────────
+async function renderApr(sec){
+  const c=document.getElementById('main-content');
+  if(sec==='perfil'){
+    c.innerHTML='<div class="loading">Cargando...</div>';
+    const [userDoc,compSnap,actSnap,guiasSnap]=await Promise.all([
+      db.collection('usuarios').doc(currentUser.uid).get(),
+      db.collection('competencias').get(),
+      db.collection('actividades').get(),
+      db.collection('guias').get(),
+    ]);
+    const u=userDoc.data();
+    const pend=actSnap.docs.filter(d=>d.data().estado==='pending').length;
+    c.innerHTML=`
+      <div class="perfil-hero">
+        <div class="perfil-av">${(u.nombre||'U').substring(0,2).toUpperCase()}</div>
+        <div style="flex:1;">
+          <div style="font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;color:#fff;">${u.nombre}</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.8);margin-top:3px;">${u.correo}</div>
+          <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;">
+            <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;">Aprendiz</span>
+          </div>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon-wrap" style="background:#d1fae5;">📋</div><div><div class="stat-val">${compSnap.size}</div><div class="stat-lbl">Competencias</div></div></div>
+        <div class="stat-card"><div class="stat-icon-wrap" style="background:#fef3c7;">⏳</div><div><div class="stat-val">${pend}</div><div class="stat-lbl">Pendientes</div></div></div>
+        <div class="stat-card"><div class="stat-icon-wrap" style="background:#dbeafe;">📚</div><div><div class="stat-val">${guiasSnap.size}</div><div class="stat-lbl">Guías</div></div></div>
+        <div class="stat-card"><div class="stat-icon-wrap" style="background:#d1fae5;">✅</div><div><div class="stat-val">${actSnap.docs.filter(d=>d.data().estado==='done').length}</div><div class="stat-lbl">Entregadas</div></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📈 Competencias</div>
+        ${compSnap.docs.map(d=>{const co=d.data();return`
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:${co.color||'#39a900'};flex-shrink:0;"></div>
+            <span style="flex:1;font-size:13px;font-weight:600;">${co.nombre}</span>
+            <span class="pill pill-gray">${co.trimestre||''}</span>
+            <span style="font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;color:${co.color||'#39a900'};margin-left:4px;">${co.pct||0}%</span>
+          </div>
+          <div class="bar" style="margin-bottom:12px;"><div class="bar-fill" style="width:${co.pct||0}%;background:${co.color||'#39a900'};"></div></div>
+        `}).join('')}
+      </div>`;
+  }
+  else if(sec==='competencias'){
+    c.innerHTML='<div class="loading">Cargando...</div>';
+    const snap=await db.collection('competencias').get();
+    c.innerHTML=snap.docs.map(d=>{const co=d.data();return`
+      <div class="comp-card" style="border-left-color:${co.color||'#39a900'};">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+          <div style="width:10px;height:10px;border-radius:50%;background:${co.color||'#39a900'};flex-shrink:0;"></div>
+          <span style="font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;flex:1;">${co.nombre}</span>
+          <span class="pill pill-gray">${co.trimestre||''}</span>
+        </div>
+        <div class="bar"><div class="bar-fill" style="width:${co.pct||0}%;background:${co.color||'#39a900'};"></div></div>
+      </div>`}).join('') || '<div class="empty card">Sin competencias asignadas</div>';
+  }
+  else if(sec==='actividades'){
+    c.innerHTML='<div class="loading">Cargando...</div>';
+    const snap=await db.collection('actividades').get();
+    c.innerHTML=`<div class="card"><div class="card-title">✏️ Mis actividades</div>
+      ${snap.docs.map(d=>{const a=d.data();return`
+        <div class="act-item">
+          <div style="flex:1;min-width:0;"><div class="act-name">${a.nombre}</div><div class="act-meta">${a.competencia||''} · Vence ${a.vence||''}</div></div>
+          ${pillEst(a.estado)}
+        </div>`}).join('') || '<div class="empty">Sin actividades</div>'}
+    </div>`;
+  }
+  else if(sec==='guias'){
+    c.innerHTML='<div class="loading">Cargando guías...</div>';
+    const snap=await db.collection('guias').get();
+    c.innerHTML=`<div class="card"><div class="card-title">📚 Mis guías de aprendizaje</div>
+      ${snap.docs.map(d=>{const g=d.data();return`
+        <div class="guia-item">
+          <span style="font-size:22px;">📄</span>
+          <div style="flex:1;min-width:0;"><div class="guia-name">${g.nombre}</div><div class="guia-meta">${g.competencia||''} · ${g.size||''} · ${g.fecha||''}</div></div>
+          <a href="${g.url}" target="_blank" class="btn-dl">⬇️ Descargar</a>
+        </div>`}).join('') || '<div class="empty">Sin guías disponibles aún</div>'}
+    </div>`;
+  }
+}
+</script>
+</body>
+</html>
